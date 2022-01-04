@@ -8,6 +8,7 @@ contact@nsa.sh
 realjesseshelley@gmail.com
 
 1-3-2022
+jesse@cybertutorials.com
 
 This script will decrypt DotNetNuke TripleDES (DES3) encrypted user and 
 administrative passwords. DNN uses DES3 with a 192 bit key for
