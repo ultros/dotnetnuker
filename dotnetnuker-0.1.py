@@ -1,9 +1,6 @@
 #!/usr/bin/env python
 
 """dotnetnuker-0.1.py
-9-1-2012
-contact@nsa.sh
-
 2-4-2019
 realjesseshelley@gmail.com
 
