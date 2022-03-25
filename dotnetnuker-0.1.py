@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 """dotnetnuker-0.1.py
 2-4-2019
@@ -7,7 +7,11 @@ realjesseshelley@gmail.com
 1-3-2022
 jesse@cybertutorials.com
 
-This script will decrypt DotNetNuke TripleDES (DES3) encrypted user and 
+3-24-2022
+jesse@cybertutorials.com
+
+
+This script will decrypt DotNetNuke TripleDES (DES3) encrypted user and
 administrative passwords. DNN uses DES3 with a 192 bit key for
 default password storage. This means that all DNN passwords are
 completely reversible.
@@ -28,56 +32,59 @@ from Crypto.Cipher import DES3
 import binascii
 from base64 import b64encode, b64decode
 
-def decrypt_dnn_des3( encoded_ciphertext, key ):
-  """Decrypt DES3 passphrase
 
-  :Args:
-  encoded_ciphertext -- Base64 Encoded Ciphertext
-  key -- Decryption Key
+def decrypt_dnn_des3(encoded_ciphertext, key):
+    """Decrypt DES3 passphrase
 
-  Returns decoded and decrypted passphrase.
+    :Args:
+    encoded_ciphertext -- Base64 Encoded Ciphertext
+    key -- Decryption Key
 
-  """
-  BLOCKSIZE = 8  #  DES3 Blocksize is 8 Bytes
-  ciphertext = b64decode(encoded_ciphertext)
-  if len(ciphertext) % BLOCKSIZE != 0:
-    print "Invalid ciphertext! Not a multiple of DES3 blocksize"
+    Returns decoded and decrypted passphrase.
 
-  key = binascii.unhexlify(key)
-  decipher = DES3.new(key, DES3.MODE_CBC)
-  password = decipher.decrypt(ciphertext)
+    """
+    BLOCKSIZE = 8  # DES3 Blocksize is 8 Bytes
+    ciphertext = b64decode(encoded_ciphertext)
+    if len(ciphertext) % BLOCKSIZE != 0:
+        print("Invalid ciphertext! Not a multiple of DES3 blocksize")
 
-  #  strip 16 byte salt with slice notation [16:]
-  return strip_padding(password[16:])
+    key = binascii.unhexlify(key)
+    decipher = DES3.new(key, DES3.MODE_CBC)
+    password = decipher.decrypt(ciphertext)
 
-def strip_padding( plaintext ):
-  """Strip DES3 padding from passphrase
+    #  strip 16 byte salt with slice notation [16:]
+    return strip_padding(password[16:])
 
-  :Args:
-  plaintext -- decoded and decrypted passphrase.
 
-  Returns passphrase without padding.
+def strip_padding(plaintext):
+    """Strip DES3 padding from passphrase
 
-  """
-  pad = ord(plaintext[-1])
+    :Args:
+    plaintext -- decoded and decrypted passphrase.
 
-  #  verify padding byte is really a padding byte
-  if pad > 8:
-    print "Padding byte is not a padding byte!"
-    exit(1)
-  
-  for c in plaintext[-pad:]:
-    if ord(c) != pad:
-      print "Bad padding"
-      exit(1)
- 
-  plaintext = plaintext[:-pad]
+    Returns passphrase without padding.
 
-  return plaintext
- 
+    """
+    pad = ord(plaintext[-1])
+
+    #  verify padding byte is really a padding byte
+    if pad > 8:
+        print("Padding byte is not a padding byte!")
+        exit(1)
+
+    for c in plaintext[-pad:]:
+        if ord(c) != pad:
+            print("Bad padding")
+            exit(1)
+
+    plaintext = plaintext[:-pad]
+
+    return plaintext
+
+
 # passphrase ciphertext from aspnet_members table
 encoded_ciphertext = "8St3xb8NHhSVRof5I6TqZt6DMlPzM3M/uEFstxRNGit17VIX4UthWA=="
 # 'decryptionkey' from web.config located in dnn root install
 key = "B1F879A992A2F6BD98C68367C9D07AA2C16F454B5638847C"
 
-print decrypt_dnn_des3(encoded_ciphertext, key)
+print(decrypt_dnn_des3(encoded_ciphertext, key))
