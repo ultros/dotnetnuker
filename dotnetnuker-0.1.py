@@ -1,15 +1,6 @@
 #!/usr/bin/env python3
 
 """dotnetnuker-0.1.py
-2-4-2019
-realjesseshelley@gmail.com
-
-1-3-2022
-jesse@cybertutorials.com
-
-3-24-2022
-jesse@cybertutorials.com
-
 
 This script will decrypt DotNetNuke TripleDES (DES3) encrypted user and
 administrative passwords. DNN uses DES3 with a 192 bit key for
@@ -24,7 +15,6 @@ found in the dnn root folder. It should be listed as the value
 "decryptionkey" under <system.web>.
 
 The DES3 implementation used by DotNetNuke uses PKCS7 for padding.
-This is handled in the "strip_padding" function.
 
 """
 
@@ -62,12 +52,10 @@ def strip_padding(plaintext):
     :Args:
     plaintext -- decoded and decrypted passphrase.
 
-    Returns passphrase without padding.
-
+    Returns passphrase.
     """
     pad = ord(plaintext[-1])
 
-    #  verify padding byte is really a padding byte
     if pad > 8:
         print("Padding byte is not a padding byte!")
         exit(1)
